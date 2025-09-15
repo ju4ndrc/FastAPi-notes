@@ -1,6 +1,6 @@
 from fastapi import FastAPI,HTTPException
 from models import Customer,Transaction,Invoice,CustomerBase,CreateCustomer
-
+from db import SessionDep
 
 
 app = FastAPI()
@@ -12,7 +12,7 @@ async def home():
 db_customers: list[Customer]=[]
 
 @app.post("/customers", response_model=Customer)
-async def create_customer(customer_data:Customer):
+async def create_customer(customer_data:Customer, session:SessionDep):
     customer = Customer.model_validate(customer_data.model_dump()) #devuelve un diccionario con los datos
     customer.id = len(db_customers) + 54
     db_customers.append(customer)
