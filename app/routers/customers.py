@@ -46,7 +46,7 @@ async def delete_customer(customer_id: int ,session:SessionDep) -> Customer:
     customer = session.get(Customer, customer_id)
 
     if not customer:
-        raise HTTPException(status_code=404, detail="We can not find, this customer")
+        raise HTTPException(status_code=404, detail="Customer doesnt exits")
     session.delete(customer)
     session.commit()
     return {"ok":True}

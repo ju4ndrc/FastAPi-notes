@@ -15,6 +15,9 @@ To run ↘
 ```bash
   fastapi dev "main".py 
 ```
+```bash
+  fastapi dev app/main.py 
+```
 > **Technologies that are used**
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![SQLModel](https://img.shields.io/badge/SQLModel-FF6B6B?style=for-the-badge)](https://sqlmodel.tiangolo.com/)
