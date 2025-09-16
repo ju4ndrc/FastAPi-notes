@@ -28,3 +28,6 @@ htmlcov/
 Thumbs.db
 coverage.txt
 CLAUDE.md
+#Data Base
+db.sqlite3
+*db.sqlite3
