@@ -19,7 +19,10 @@ To run ↘
   fastapi dev app/main.py 
 ```
 > **Technologies that are used**
+
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![SQLModel](https://img.shields.io/badge/SQLModel-FF6B6B?style=for-the-badge)](https://sqlmodel.tiangolo.com/)
 
 [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
+
+[![sqlalchemy](https://www.sqlalchemy.org/img/sqla_logo.png)](https://www.sqlalchemy.org/)
