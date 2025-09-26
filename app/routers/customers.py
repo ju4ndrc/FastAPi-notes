@@ -1,4 +1,4 @@
-from dns.resolver import query
+
 from fastapi import APIRouter, status, HTTPException, Query
 from sqlmodel import select
 from models import Customer, CreateCustomer, UpdateCustomer, Plan, CustomerPlan, StatusEnum
@@ -14,6 +14,17 @@ async def create_customer(customer_data:CreateCustomer, session:SessionDep):
     session.refresh(customer)
 
     return customer
+    # try:
+    #     session.add(customer)
+    #     session.commit()
+    #     session.refresh(customer)
+    #     return customer
+    # except IntegrityError:
+    #     session.rollback()  # Rollback the transaction to keep the session clean
+    #     raise HTTPException(
+    #         status_code=400,
+    #         detail="A customer with this email already exists."
+    #     )
 
 # @router.get("/customers/{customer_id}",response_model = CustomerBase)
 # async def find_customer(customer_id: int):
@@ -94,12 +105,14 @@ async def subscribe_customer_to_plan(customer_id:int,session:SessionDep , plan_s
     customer_db = session.get(Customer, customer_id)
     if not customer_db:
         raise HTTPException(status_code=404, detail="We cant find this customer ")
+
+
     query = (
         select(CustomerPlan)
-        .where(CustomerPlan.customer_id == customer_id)
-        .where(CustomerPlan.status == plan_status)
+        .where(CustomerPlan.customer_id == customer_id) #Aqui se filtran todos los CustomerPlan de customer_id
+        .where(CustomerPlan.status == plan_status) #Aqui se filtran todos los de estado
          )
 
-    plans = session.exec(query).all()
+    plans = session.exec(query).all() #.exec permite ejecutar una query y .all() obtiene toda la lista
 
     return plans
