@@ -1,9 +1,10 @@
 import time
-from http.client import responses
-from time import process_time
+from http.client import responses, HTTPException
+
 from typing import Annotated
 
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Request,status
+
 from fastapi.params import Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
@@ -41,7 +42,11 @@ async def get_headers(requets: Request, call_next):
 security = HTTPBasic()
 @app.get("/")
 async def home(credentials:Annotated[HTTPBasicCredentials, Depends(security)]):
-    return{"Hello":"Juan🤑"}
+    print(credentials)
+    if credentials.username == "lupekoko" and credentials.password == "123":
+        return{"Hello":f"{credentials.username}"}
+    else:
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
 
 
 
