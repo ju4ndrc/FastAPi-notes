@@ -6,7 +6,7 @@ from db import SessionDep
 
 router = APIRouter()
 
-@router.post("/customers", response_model=Customer,tags=['customers'])
+@router.post("/customers", response_model=Customer,status_code=status.HTTP_201_CREATED,tags=['customers'])
 async def create_customer(customer_data:CreateCustomer, session:SessionDep):
     customer = Customer.model_validate(customer_data.model_dump()) #devuelve un diccionario con los datos
     session.add(customer)

@@ -1,8 +1,12 @@
 import time
 from http.client import responses
 from time import process_time
+from typing import Annotated
 
 from fastapi import FastAPI,Request
+from fastapi.params import Depends
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
 from models import Transaction,Invoice
 from db import SessionDep,create_all_tables
 from sqlmodel import select
@@ -33,8 +37,10 @@ async def get_headers(requets: Request, call_next):
         print(f"{header}:{value}")
     response = await call_next(requets)
     return response
+
+security = HTTPBasic()
 @app.get("/")
-async def home():
+async def home(credentials:Annotated[HTTPBasicCredentials, Depends(security)]):
     return{"Hello":"Juan🤑"}
 
 
