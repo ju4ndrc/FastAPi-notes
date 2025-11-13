@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', path='/index.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="./index.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Fast api notes</h1>
+    <main class="cart-container">
+  <!-- Lista de productos -->
+      {% for customer in customers %}
+  <section class="cart-items">
+
+
+    <div class="cart-item">
+
+      <div class="item-info">
+        <h3>Clientes</h3>
+
+        <p>{{customer.name}}</p>
+        <p>{{customer.id}}</p>
+        <p>{{customer.description}}</p>
+        <p>{{customer.age}}</p>
+        <p>{{customer.email}}</p>
+
+
+      </div>
+
+    </div>
+  </section>
+      {% endfor %}
+
+
+</main>
+
+
+
+</body>
+</html>
