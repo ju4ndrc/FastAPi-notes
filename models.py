@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from sqlmodel import SQLModel, Field,Relationship,select,Session
 from enum import Enum
-from db import  engine
+from db import  engine_clever
 
 
 
@@ -40,15 +40,7 @@ class CustomerBase(SQLModel):
     description: str | None = Field(default=None)
     email : EmailStr = Field(default=None)#se puede agregar un campo unique (email : EmailStr = Field(default=None, unique = True))
     age: int = Field(default=None)
-    @field_validator("email")
-    @classmethod
-    def validate_email(cls, value):
-        session = Session(engine)
-        query = select(Customer).where(Customer.email == value)#esto evita que se duplique el email
-        result = session.exec(query).first()#aqui entrega el primer elemento de la query y sino entrega none
-        if result:
-            raise ValueError("This email is alredy regitered")
-        return value
+
 
 
 class CreateCustomer(CustomerBase):
