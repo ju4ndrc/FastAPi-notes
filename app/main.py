@@ -1,5 +1,5 @@
 import time
-from http.client import responses, HTTPException
+from http.client import  HTTPException
 
 from typing import Annotated
 
@@ -7,13 +7,31 @@ from fastapi import FastAPI,Request,status
 
 from fastapi.params import Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from starlette.responses import HTMLResponse
 
-from models import Transaction,Invoice
-from db import SessionDep,create_all_tables
-from sqlmodel import select
+from models import Invoice
+from db import init_db
 from .routers import customers, transactions,plans
+#templates
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
-app = FastAPI(lifespan=create_all_tables)#se ejecuta al comienxo y al final el lifespan
+##clever
+from contextlib import asynccontextmanager
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db(app)
+    yield
+app = FastAPI(lifespan=lifespan)#se ejecuta al comienxo y al final el lifespan
+
+app.mount("/templates", StaticFiles(directory="app/templates"), name="templates")
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
+templates = Jinja2Templates(directory="app/templates")
 
 app.include_router(customers.router)
 app.include_router(transactions.router)
@@ -48,9 +66,15 @@ async def home(credentials:Annotated[HTTPBasicCredentials, Depends(security)]):
     else:
         raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED)
 
+@app.get("/templates",response_class=HTMLResponse)
+async def root(request:Request):
+    return (templates.TemplateResponse
+            (
+        "index.html",{"request":request}
+    ))
 
 
 @app.post("/invoices")
 async def create_invoices(invoices_data:Invoice):
-    
+
     return invoices_data
